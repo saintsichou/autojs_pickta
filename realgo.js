@@ -10,8 +10,8 @@
     var path = '/sdcard/1.txt';
     var file = open(path);
     var name = file.readlines();
-    log(name)
-    log('nasdlfkjsdfk',name.length)
+    // log(name)
+    log('秃驴几厘米======》',name.length)
    
     while(x<name.length-1){
         var path = '/sdcard/1.txt';
@@ -22,12 +22,11 @@
         var arr = str.split('-');
         var name = arr[0];
         var pass = arr[1];
-        log(arr)
-        log('name',arr[0])
-        log('pass',arr[1])
+        log('秃驴进入死循环 ======》',name.length)
         start(name,pass);
         x++;
     }
+    // start()
     function start(name,pass){
         auto.waitFor()
         launchApp('PickTa');
@@ -85,30 +84,37 @@
             text('糖果屋').findOne().parent().click()
             sleep(1500);
             var j=0;
+            var len = id('rv_list').findOne().children().length 
             id('rv_list').findOne().children().forEach((item,ind) => {
+                log('ind==============',ind)
                 var get = item.findOne(text('领取'));
+                // sleep(1000);
                 if(get == null){
                     j++;
+                    // sleep(1000);
                 }else{
                     sleep(3000);
                     get.click();
+                    log('lingqu========>')
                     sleep(3000);
+                    j++;
+                    sleep(1000);
+                }
+                log('jjjjjj',j)
+                log('lennnnnn',len)
+                if((len*1) == j*1){
+                    log('doneeeeeeeee')
+                    sleep(1000);
+                    back();
+                    sleep(1000);
+                    back();
+                    var out = id('rl_logout').findOne();
+                    out.click();
+                    sleep(1000);
+                    id('tv_confirm').findOne().click();
                 }
             });
-            log('jjjjjj',j)
-            var len = id('rv_list').findOne().children().length
-            log('lennnnnn',len)
-            if(len == j){
-                log('doneeeeeeeee')
-                sleep(1000);
-                back();
-                sleep(1000);
-                back();
-                var out = id('rl_logout').findOne();
-                out.click();
-                sleep(1000);
-                id('tv_confirm').findOne().click();
-            }
+            
             sleep(1000);
     }
     
