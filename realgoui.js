@@ -1,37 +1,124 @@
 /*
- * @Date: 2020-08-05 17:34:58
+ * @Date: 2020-08-10 19:04:45
  * @LastEditors: Lee
- * @LastEditTime: 2020-08-10 09:46:41
+ * @LastEditTime: 2020-08-10 16:16:51
  */
-"auto";
-    
-    sleep(1000);
-    var x= 0;   
-    var path = '/sdcard/1.txt';
-    var file = open(path);
-    var name = file.readlines();
-    // var storage = storages.create("files") //本地存储文件建立
-    // storage.put("键名","键值") //向存储中存入数据
-    // storage.get("键名") 
-    var arr =[];
-    // log(name)
-    log('秃驴几厘米======》',name.length)
-   
-    while(x<=name.length-1){
+"ui";
+
+// 误区一：使用线程开启无障碍
+// 浪费CPU和内存资源，不必要的线程
+// threads.start(function() {
+//      auto.waitFor();
+// });
+
+
+ui.layout(
+    <vertical>
+        <appbar>
+            <toolbar title="李二狗测试脚本"/>
+        </appbar>
+        <Switch id="autoService" text="无障碍服务" checked="{{auto.service != null}}" padding="8 8 8 8" textSize="15sp"/>
+        <frame height="200" gravity="center">
+            <text text="启动脚本之前请先开启无障碍服务,有问题联系李二狗qq328891723" gravity="center"/>
+        </frame>
+        <button bg="#000000" textColor="#ffffff" id="start" text="开始运行"/>
+    </vertical>
+);
+
+ui.autoService.on("check", function(checked) {
+    // 用户勾选无障碍服务的选项时，跳转到页面让用户去开启
+    if(checked && auto.service == null) {
+        app.startActivity({
+            action: "android.settings.ACCESSIBILITY_SETTINGS"
+        });
+    }
+    if(!checked && auto.service != null){
+        auto.service.disableSelf();
+    }
+});
+
+// 当用户回到本界面时，resume事件会被触发
+ui.emitter.on("resume", function() {
+    // 此时根据无障碍服务的开启情况，同步开关的状态
+    ui.autoService.checked = auto.service != null;
+});
+
+ui.start.on("click", function(){
+    //程序开始运行之前判断无障碍服务
+    if(auto.service == null) {
+        toast("请先开启无障碍服务！");
+        return;
+    }
+    main();
+});
+
+function main2() {
+    // 这里写脚本的主逻辑
+    threads.start(function () {
+        ui.logs.setText('xxxxxxxxx')
+        ui.logs.setText('xxxxxxxxx222')
+    });
+}
+function main() {
+    // 这里写脚本的主逻辑
+    threads.start(function () {
+        console.info("开始运行");
+        sleep(1000);
+        console.show();
+        var x= 0;   
         var path = '/sdcard/1.txt';
         var file = open(path);
         var name = file.readlines();
-        var str = name[x];
-        log(str)
-        var arr = str.split('-');
-        var name = arr[0];
-        var pass = arr[1];
-        arr.push(name)
-        log('秃驴拥有姓名 ======》',name)
-        log('广告请联系李二狗qq328891723')
-        start(name,pass);
-        x++;
-    }
+        // var storage = storages.create("files") //本地存储文件建立
+        // storage.put("键名","键值") //向存储中存入数据
+        // storage.get("键名") 
+        var arr =[];
+        // log(name)
+        console.warn('秃驴几厘米======》',name.length) 
+        while(x<=name.length-1){
+            var path = '/sdcard/1.txt';
+            var file = open(path);
+            var name = file.readlines();
+            var str = name[x];
+            log(str)
+            var arr = str.split('-');
+            var name = arr[0];
+            var pass = arr[1];
+            arr.push(name)
+            console.info('秃驴泡妞的第 ======》'+x+'个电话',name)
+            console.error('广告请联系李二狗qq328891723')
+            // ui.logs.setText('广告请联系李二狗qq328891723')
+            // ui.logs.setText("秃驴拥有姓名 ======》"+name)
+            start(name,pass);
+            x++;
+        }
+        log("运行结束");
+        console.hide();
+        exit();
+    });
+}
+
+
+// //悬浮窗功能
+// var w = floaty.window(
+//     <frame gravity='center'>
+//         <button bg="#000000" textColor="#ffffff" id="sp" text="开始运行"/>
+//     </frame>
+// )
+// w.exitOnClose();
+// // w.context.click(()=>{
+// //     w.setAdjustEnabled(!w.isAdjustEnabled());
+// // })
+// w.sp.click(()=>{
+//     toast('start')
+// })
+// setInterval(()=>{},1000);
+
+
+   
+
+    
+   
     // start()
     function start(name,pass){
         auto.waitFor()
@@ -52,11 +139,11 @@
         ad.click();
         sleep(1000);
         var i = 0
-        while(i<7){
+        while(i<6){
             i++;
-            log('i======已经看过的广告数目',i);
+            console.warn('i======已经看过的广告数目',i);
             var enterAd = text('进入广告').findOne().parent();
-            log(enterAd)
+            // log(enterAd)
             enterAd.click();
             sleep(12000);
             var juan = text('领券').findOne().parent();
